@@ -1,0 +1,23 @@
+.root {
+  padding: calc(0.5rem * var(--mantine-scale)) 5px;
+}
+
+[data-mantine-color-scheme="light"]:hover .root:hover {
+  --_nav-link-bg: var(--mantine-color-accent-0);
+}
+[data-mantine-color-scheme="dark"]:hover .root:hover {
+  --_nav-link-bg: var(--mantine-color-accent-8);
+}
+.section[data-position="left"] {
+  --_section-mr: var(--mantine-spacing-xs);
+}
+.label {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: inherit;
+}
+
+.root[data-active] {
+  --_nav-link-color: inherit;
+
+  border-left: 3px solid var(--mantine-color-secondary-2);
+}
