@@ -15,7 +15,7 @@ const common = {
     withTimezone: true,
   }).defaultNow(),
 };
-export const statusEnum = pgEnum("status", [
+const statusEnum = pgEnum("status", [
   "Requested",
   "Approved",
   "Rejected",
