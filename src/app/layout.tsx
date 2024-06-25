@@ -5,6 +5,7 @@ import { MainLayout } from "@components/common/layouts/main-layout";
 import RootStyleRegistry from "./mantine";
 import AppProgressBar from "@components/common/progress-bar";
 import ReactQueryProvider from "../providers/ReactQueryClientProvider";
+import { DataSourceProvider } from "../providers/DataSourceProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,11 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <RootStyleRegistry>
           <AppProgressBar>
-            <ReactQueryProvider>
-              <MainLayout>{children}</MainLayout>
-            </ReactQueryProvider>
+            <DataSourceProvider>
+              <ReactQueryProvider>
+                <MainLayout>{children}</MainLayout>
+              </ReactQueryProvider>
+            </DataSourceProvider>
           </AppProgressBar>
         </RootStyleRegistry>
       </body>
