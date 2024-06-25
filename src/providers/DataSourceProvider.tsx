@@ -15,8 +15,8 @@ type GlobalDataSourceKeyType = DataSourcesType[number]["key"];
 
 export type DataSourcesKeys = GlobalDataSourceKeyType;
 export type DataSourceType = {
-  url: string;
-  method: MethodType;
+  url?: string;
+  method?: MethodType;
   key?: DataSourcesKeys;
   valueKey?: string;
   labelKey?: string;

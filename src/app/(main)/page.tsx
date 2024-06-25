@@ -1,5 +1,10 @@
 "use client";
 import { FormBuilder } from "../../lib/form-builder";
+interface ReturnType {
+  id: any;
+  label: string;
+  type: any;
+}
 
 export default function Home() {
   return (
@@ -12,11 +17,43 @@ export default function Home() {
               name: "email",
               type: "text",
               label: "Email",
+              condition: ["email"],
             },
             {
               name: "password",
               type: "password",
               label: "Password",
+              condition: ["password"],
+            },
+            {
+              name: "confirmPassword",
+              type: "password",
+              label: "Confirm",
+              condition: ["confirmPassword"],
+            },
+            {
+              name: "fullName",
+              type: "text",
+              label: "Full Name",
+              onWatchFields: {
+                fields: ["name"],
+                formatter: (val) => val.map((field) => field.value).join(","),
+              },
+            },
+            {
+              name: "calendar",
+              type: "date",
+              label: "Calendar",
+            },
+            {
+              name: "select2",
+              type: "select",
+              label: "Select",
+              dataSource: {
+                key: "address-data",
+                valueKey: "address",
+                labelKey: "address",
+              },
             },
           ]}
           onSubmit={console.log}

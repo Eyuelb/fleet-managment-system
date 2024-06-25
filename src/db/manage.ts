@@ -159,3 +159,9 @@ function buildQuery<T extends SchemaNames>(tableName: T) {
 
   return methods;
 }
+
+export async function getSchemaColumns<T extends SchemaNames>(tableName: T) {
+  const table = schema[tableName];
+
+  return table.$inferInsert
+}

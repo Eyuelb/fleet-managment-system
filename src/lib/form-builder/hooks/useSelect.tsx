@@ -10,7 +10,6 @@ export const useSelect = () => {
   const { data: manualData, name, dataSource } = field;
 
   const dataQuery = useGetDataSourceByKey(dataSource?.key);
-
   const { data: fetchedData, isLoading } = useQueryRequest({
     url: dataQuery?.url ?? "",
     queryKey: [dataQuery?.key, name],

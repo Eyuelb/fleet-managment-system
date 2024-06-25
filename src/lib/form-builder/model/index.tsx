@@ -10,9 +10,9 @@ export interface FieldOption {
   value: any;
 }
 export type FieldComponentTypes = keyof typeof BaseFields;
-export type FormatterValuesProps = FieldType&{
-  value:any
-}
+export type FormatterValuesProps = FieldType & {
+  value: any;
+};
 export type FieldType<T = any> = {
   name: string;
   label?: string;
@@ -23,6 +23,7 @@ export type FieldType<T = any> = {
   disabled?: boolean;
   hidden?: boolean;
   condition?: [ConditionType] | ConditionType[];
+
   onWatchFields?: {
     fields: string[];
     formatter?: (
@@ -36,6 +37,11 @@ export type FieldType<T = any> = {
       }
     ) => string | number;
   };
+  // usage example for
+  // onWatchFields: {
+  //  fields: ["name"],
+  //  formatter: (val) => val.map((field) => field.value).join(","),
+  // },
 
   //array fields
   data?: FieldOption[];
