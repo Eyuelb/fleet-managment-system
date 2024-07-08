@@ -4,6 +4,7 @@ import { NumberInput, PasswordInput, Select, TextInput } from "@mantine/core";
 import { Checkbox, MultiSelect, Textarea } from "@mantine/core";
 import DatePicker from "../../../calendar/components/date-picker";
 import { TimePicker } from "@components/common/time-picker";
+import { MapAutocompleteInput } from "@components/google-map/components/autocomleteInput";
 
 export type ReactProps = Record<string, any>;
 export type ReactComponentWithRequiredProps<Props extends ReactProps> =
@@ -25,7 +26,8 @@ type FieldsTypes =
   | "multi-select"
   | "checkbox"
   | "file"
-  | "date";
+  | "date"
+  | "map-autocomplete-select";
 
 type BaseFieldsTypes = {
   [key in FieldsTypes]: MappingItem<any>;
@@ -42,4 +44,5 @@ export const BaseFields: BaseFieldsTypes = {
   file: [TextInput, {}],
   date: [DatePicker, { valueFormat: "YYYY-MM-DD" }],
   time: [TimePicker, {}],
+  "map-autocomplete-select": [MapAutocompleteInput, {}],
 };

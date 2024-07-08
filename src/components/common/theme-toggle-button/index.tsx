@@ -7,7 +7,7 @@ import {
 } from '@mantine/core';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 import React, { memo, useMemo } from 'react';
-import { useIsMounted } from '@hooks';
+import { useIsMounted } from '@hooks/useIsMounted';
 
 type Props = ThemeIconProps;
 

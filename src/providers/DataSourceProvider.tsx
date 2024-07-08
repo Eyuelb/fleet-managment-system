@@ -1,12 +1,14 @@
-"use client"
+"use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { MethodType } from "../models/request";
+import * as schema from "@db/schema";
+
 export const DataSources = [
   {
-    url: "/address/find-all-by-address-type/REGION",
+    key: "roles",
+    url: "/api/v1/roles",
     method: "GET",
-    key: "address-data",
-    accessors: { valueKey: "addressUuid", labelKey: "addressName" },
+    accessors: { valueKey: "id", labelKey: "name" },
   },
 ] as const;
 

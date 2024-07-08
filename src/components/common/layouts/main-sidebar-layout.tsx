@@ -1,33 +1,53 @@
-import React from 'react';
-import { Sidebar, SidebarItem } from './common';
-import { AppShell, ScrollArea } from '@mantine/core';
-import { IconHome, IconSettings, IconUser } from '@tabler/icons-react';
-import { iconDefaultProps } from '../../../config/icon';
+import React from "react";
+import { Sidebar, SidebarItem } from "./common";
+import { AppShell, ScrollArea } from "@mantine/core";
+import { IconFolderOpen, IconFolderPlus, IconFolderQuestion, IconFolderStar, IconHome, IconSettings, IconSettingsBolt, IconUser, IconUsers } from "@tabler/icons-react";
+import { iconDefaultProps } from "../../../config/icon";
 const sidebarItems: SidebarItem[] = [
   {
-    label: 'Home',
-    link: '/',
-    icon: <IconHome {...iconDefaultProps}/>,
+    label: "My Requests",
+    icon: <IconFolderStar {...iconDefaultProps} />,
+    link: "/my-requests",
   },
   {
-    label: 'Profile',
-    link: '/profile',
-    icon: <IconUser {...iconDefaultProps}/>,
+    label: "Create Requests",
+    icon: <IconFolderPlus {...iconDefaultProps} />,
+    link: "/create-requests",
+
   },
   {
-    label: 'Settings',
-    icon: <IconSettings {...iconDefaultProps}/>,
-    items: [
-      {
-        label: 'Account',
-        link: '/settings/account',
-      },
-      {
-        label: 'Security',
-        link: '/settings/security',
-      },
-    ],
+    label: "Handle Requests",
+    icon: <IconFolderOpen {...iconDefaultProps} />,
+    link: "/handle-requests",
   },
+  {
+    label: "Administration",
+    icon: <IconSettingsBolt {...iconDefaultProps} />,
+    items:[
+      {
+        label: "Users",
+        link: "/administration/users/list",
+      },
+      {
+        label: "Roles",
+        link: "/administration/roles/list",
+      },
+      {
+        label: "Groups",
+        link: "/administration/groups/list",
+      },
+      {
+        label: "Vehicles",
+        link: "/administration/vehicles/list",
+      },
+      {
+        label: "Routes",
+        link: "/administration/routes/list",
+      },
+    ]
+  },
+
+
 ];
 export const SidebarLayout = () => {
   return (

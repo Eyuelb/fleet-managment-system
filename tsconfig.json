@@ -20,10 +20,13 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@components/*": ["./src/components/*"],
-      "@hooks": ["./src/hooks/"],
+      "@hooks/*": ["./src/hooks/*"],
       "@utils/*": ["./src/utils/*"],
       "@styles/*": ["./src/styles/*"],
-      "@db/*": ["./src/db/*"]
+      "@db/*": ["./src/db/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@models/*": ["./src/models/*"]
+
 
     }
   },

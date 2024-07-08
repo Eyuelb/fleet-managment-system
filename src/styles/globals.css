@@ -32,3 +32,50 @@
 .data-checked {
   @apply bg-[var(--mantine-color-primary-light)] border border-[var(--mantine-color-primary-3)];
 }
+
+
+.form-wrapper {
+  display: flex;
+  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+  gap: 18px 20px;
+}
+.form-wrapper-sm {
+  display: flex;
+  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+  gap: 18px 20px;
+}
+
+.form-wrapper .form-field {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+.form-wrapper-sm .form-field {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+@media (min-width: 720px) {
+  .form-wrapper .form-field {
+    flex: 0 0 48%;
+  }
+  .form-wrapper-sm .form-field {
+    flex: 0 0 22%;
+  }
+}
+@media (max-width: 720px) {
+  .form-wrapper {
+    max-width: 100%;
+  }
+  .form-wrapper-sm .form-field {
+    flex: 0 0 48%;
+  }
+}
+@media (max-width: 500px) {
+  .form-wrapper {
+    max-width: 100%;
+  }
+  .form-wrapper-sm .form-field {
+    flex: 0 0 100%;
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "id": "841e1afd-118c-4127-86d1-e0a81bb0ae65",
+  "id": "90f42890-763a-4154-92ce-263f3b41248b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -17,9 +17,16 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
           "default": "now()"
         },
         "vehicleId": {
@@ -55,65 +62,12 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "fleet_vehicleId_vehicles_id_fk": {
-          "name": "fleet_vehicleId_vehicles_id_fk",
-          "tableFrom": "fleet",
-          "tableTo": "vehicles",
-          "columnsFrom": [
-            "vehicleId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "fleet_driverId_users_id_fk": {
-          "name": "fleet_driverId_users_id_fk",
-          "tableFrom": "fleet",
-          "tableTo": "users",
-          "columnsFrom": [
-            "driverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "fleet_routeId_routes_id_fk": {
-          "name": "fleet_routeId_routes_id_fk",
-          "tableFrom": "fleet",
-          "tableTo": "routes",
-          "columnsFrom": [
-            "routeId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "fleet_approvedBy_users_id_fk": {
-          "name": "fleet_approvedBy_users_id_fk",
-          "tableFrom": "fleet",
-          "tableTo": "users",
-          "columnsFrom": [
-            "approvedBy"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.maintenance": {
-      "name": "maintenance",
+    "public.groups": {
+      "name": "groups",
       "schema": "",
       "columns": {
         "id": {
@@ -125,66 +79,33 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "vehicleId": {
-          "name": "vehicleId",
-          "type": "uuid",
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
-        "requestedByUserId": {
-          "name": "requestedByUserId",
-          "type": "uuid",
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "description": {
           "name": "description",
           "type": "text",
           "primaryKey": false,
           "notNull": false
-        },
-        "status": {
-          "name": "status",
-          "type": "status",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "maintenance_vehicleId_vehicles_id_fk": {
-          "name": "maintenance_vehicleId_vehicles_id_fk",
-          "tableFrom": "maintenance",
-          "tableTo": "vehicles",
-          "columnsFrom": [
-            "vehicleId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "maintenance_requestedByUserId_users_id_fk": {
-          "name": "maintenance_requestedByUserId_users_id_fk",
-          "tableFrom": "maintenance",
-          "tableTo": "users",
-          "columnsFrom": [
-            "requestedByUserId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -201,9 +122,16 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
           "default": "now()"
         },
         "name": {
@@ -237,10 +165,23 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "routeName": {
+          "name": "routeName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "startLocation": {
           "name": "startLocation",
@@ -254,11 +195,234 @@
           "primaryKey": false,
           "notNull": false
         },
-        "distance": {
-          "name": "distance",
-          "type": "numeric",
+        "startX": {
+          "name": "startX",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "startY": {
+          "name": "startY",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endX": {
+          "name": "endX",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "endY": {
+          "name": "endY",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "distance": {
+          "name": "distance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta": {
+          "name": "meta",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "routes_routeName_unique": {
+          "name": "routes_routeName_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "routeName"
+          ]
+        }
+      }
+    },
+    "public.serviceRequest": {
+      "name": "serviceRequest",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "request": {
+          "name": "request",
+          "type": "request",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userGroupId": {
+          "name": "userGroupId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "userUnitId": {
+          "name": "userUnitId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.units": {
+      "name": "units",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.userGroup": {
+      "name": "userGroup",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "groupId": {
+          "name": "groupId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.userUnit": {
+      "name": "userUnit",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp(6) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "userId": {
+          "name": "userId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unitId": {
+          "name": "unitId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -279,9 +443,16 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
           "default": "now()"
         },
         "name": {
@@ -324,25 +495,11 @@
           "name": "roleId",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "users_roleId_roles_id_fk": {
-          "name": "users_roleId_roles_id_fk",
-          "tableFrom": "users",
-          "tableTo": "roles",
-          "columnsFrom": [
-            "roleId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
@@ -367,9 +524,16 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp (6) with time zone",
+          "type": "timestamp(6) with time zone",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
           "default": "now()"
         },
         "name": {
@@ -421,17 +585,7 @@
       "uniqueConstraints": {}
     }
   },
-  "enums": {
-    "public.status": {
-      "name": "status",
-      "schema": "public",
-      "values": [
-        "Requested",
-        "Approved",
-        "Rejected"
-      ]
-    }
-  },
+  "enums": {},
   "schemas": {},
   "_meta": {
     "columns": {},

@@ -2,7 +2,7 @@ import React, { PropsWithChildren, RefObject, useContext } from 'react';
 import { Burger, NavLink, Text, ThemeIcon } from '@mantine/core';
 import styles from './sidebar-item.module.scss';
 import { useCallback } from 'react';
-import { useActivePath } from '@hooks';
+import { useActivePath } from '@hooks/useActivePath';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppLayoutContext } from '../layouts/main-layout';

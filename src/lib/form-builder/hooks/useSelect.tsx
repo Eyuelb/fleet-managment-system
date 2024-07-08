@@ -1,5 +1,5 @@
 import { useDeepMemo } from "./useDeepMemo";
-import { useFieldConfiguration } from './useFieldConfiguration';
+import { useFieldConfiguration } from "./useFieldConfiguration";
 import formatData from "@utils/data-converter";
 import { useGetDataSourceByKey } from "../../../providers/DataSourceProvider";
 import useQueryRequest from "../../../hooks/useQueryRequest";
@@ -9,10 +9,10 @@ export const useSelect = () => {
 
   const { data: manualData, name, dataSource } = field;
 
-  const dataQuery = useGetDataSourceByKey(dataSource?.key);
+  const dataQuery = useGetDataSourceByKey(dataSource?.key) ?? dataSource;
   const { data: fetchedData, isLoading } = useQueryRequest({
     url: dataQuery?.url ?? "",
-    queryKey: [dataQuery?.key, name],
+    queryKey: [dataQuery?.key ?? dataQuery?.url, name],
     ...dataQuery,
     enabled: !!dataQuery,
   });
@@ -31,10 +31,10 @@ export const useSelect = () => {
   );
 
   if (!dataQuery)
-  return {
-    data: manualData ?? [],
-    isLoading: false,
-  };
+    return {
+      data: manualData ?? [],
+      isLoading: false,
+    };
 
   return memoData;
 };

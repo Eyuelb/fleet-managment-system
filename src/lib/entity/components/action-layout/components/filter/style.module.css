@@ -1,0 +1,8 @@
+
+.input {
+  --_input-bg: '#f5f7f9',
+  --input-placeholder-color: '#000',
+  --input-bd: '#000',
+  fontWeight: 500,
+  width: '120px',
+}

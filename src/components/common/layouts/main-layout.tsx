@@ -30,7 +30,7 @@ export const MainLayout = (props: PropsWithChildren) => {
         navbar={{
           width: 300,
           breakpoint: 'sm',
-          collapsed: { mobile: !sideBarOpened },
+          collapsed: { mobile: !sideBarOpened,desktop:false, },
         }}
         padding="md"
       >

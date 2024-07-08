@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { createSearchParams } from "@utils/helper";
-import { httpGet, httpPost } from "../lib/http-request/services";
+import { get, post } from "../lib/http-request/services";
 import { MethodType } from "../models/request";
 
 
@@ -92,11 +92,11 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     queryFn: async () => {
       switch (method) {
         case "GET":
-          return await httpGet<T>(url);
+          return await get<T>(url);
         case "POST":
-          return await httpPost<T, any>(url);
+          return await post<T, any>(url);
         default:
-          return await httpGet<T>(url);
+          return await get<T>(url);
       }
     },
     placeholderData: keepPreviousData,

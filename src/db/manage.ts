@@ -1,32 +1,18 @@
 import { count, getTableColumns, SelectedFields, SQL, sql } from "drizzle-orm";
 import * as schema from "./schema";
-import { Columns, SchemaNames, SchemaType } from "./model";
+import { Columns, FilterOperators, OrderBy, SchemaNames, SchemaType, Where } from "./model";
 import { objectTrim } from "@utils/helper";
 import { db } from ".";
 import logger from "@utils/logger";
+import { formatHeaderText } from "@utils/text";
 
 export async function queryBuilder<T extends SchemaNames>(tableName: T) {
   return buildQuery(tableName);
 }
 
 function buildQuery<T extends SchemaNames>(tableName: T) {
-  enum FilterOperators {
-    EQ = "=",
-    GT = ">",
-    GTE = ">=",
-    LT = "<",
-    LTE = "<=",
-    NEQ = "<>",
-    LIKE = "LIKE",
-    ILIKE = "ilike",
-  }
-  type FilterOperatorKeys = keyof typeof FilterOperators;
   type ColumnT = Columns<T>;
-  type Where = {
-    column: ColumnT;
-    value: any;
-    operator: FilterOperatorKeys;
-  };
+
 
   const table = schema[tableName];
   type TableT = SchemaType<T>;
@@ -44,9 +30,9 @@ function buildQuery<T extends SchemaNames>(tableName: T) {
     return methods;
   };
 
-  const where = (conditions: Where[]) => {
+  const where = (conditions: Where<T>[]) => {
     state.conditions.push(
-      ...conditions.map((condition: Where) => {
+      ...conditions.map((condition: Where<T>) => {
         const { column, value, operator } = condition;
         return sql<string>`${table[column]} ${sql.raw(
           FilterOperators[operator]
@@ -66,7 +52,7 @@ function buildQuery<T extends SchemaNames>(tableName: T) {
     return methods;
   };
 
-  const orderBy = (columns: ColumnT[], directions: ("ASC" | "DESC")[]) => {
+  const orderBy = (columns: ColumnT[], directions: OrderBy[]) => {
     state.orderBy = columns.map(
       (column, index) => sql`${table[column]} ${sql.raw(directions[index])}`
     );
@@ -158,10 +144,4 @@ function buildQuery<T extends SchemaNames>(tableName: T) {
   };
 
   return methods;
-}
-
-export async function getSchemaColumns<T extends SchemaNames>(tableName: T) {
-  const table = schema[tableName];
-
-  return table.$inferInsert
 }

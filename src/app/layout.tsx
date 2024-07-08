@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@styles/globals.css";
-import { MainLayout } from "@components/common/layouts/main-layout";
 import RootStyleRegistry from "./mantine";
 import AppProgressBar from "@components/common/progress-bar";
 import ReactQueryProvider from "../providers/ReactQueryClientProvider";
@@ -22,15 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <RootStyleRegistry>
-          <AppProgressBar>
-            <DataSourceProvider>
-              <ReactQueryProvider>
-                <MainLayout>{children}</MainLayout>
-              </ReactQueryProvider>
-            </DataSourceProvider>
-          </AppProgressBar>
-        </RootStyleRegistry>
+        <ReactQueryProvider>
+          <RootStyleRegistry>
+            <AppProgressBar>
+              <DataSourceProvider>
+                {children}
+              </DataSourceProvider>
+            </AppProgressBar>
+          </RootStyleRegistry>
+        </ReactQueryProvider>
       </body>
     </html>
   );

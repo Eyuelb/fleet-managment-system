@@ -7,8 +7,8 @@ import { useFieldConfiguration } from "./useFieldConfiguration";
 import { getOption, matchArraysByKey } from "../utils";
 import { useDeepMemo } from "./useDeepMemo";
 import useWatchFields from "./useWatch";
-import getQueryClient from "@utils/queryClient";
 import formatData from "@utils/data-converter";
+import { getQueryClient } from "../../../providers/ReactQueryClientProvider";
 
 const useFieldListener = () => {
   const field = useFieldConfiguration();
