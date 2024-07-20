@@ -12,7 +12,7 @@ export const useAutocomplete = () => {
   const [suggestions, setSuggestions] = useState<
     google.maps.places.AutocompletePrediction[]
   >([]);
-  const places = useMapsLibrary("places");
+  const { lib: places } = useMapsLibrary("places");
   const service = places ? new places.AutocompleteService() : null;
   const handleGetSuggestion = useDebouncedCallback(async (value: string) => {
     setLoading(true);

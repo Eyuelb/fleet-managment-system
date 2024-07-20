@@ -1,41 +1,59 @@
 import { ApiRequestContext, MethodType } from "@models/request";
 import { ApiResources } from "@models/resources";
 import { resourcesConfig } from "../config/resources";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { parseUrlParams } from "@utils/helper";
+import { QueryParams } from "@db/model";
+import { Session } from "@supabase/supabase-js";
 
 type RequestData<TBody> = {
   resource: ApiResources;
   id: string | undefined;
   method: MethodType;
   body: TBody | undefined;
-  operation:string | undefined;
+  operation: string | undefined;
+  params: {
+    [k: string]: string;
+  };
+  query: QueryParams<any> | undefined;
+  session: Session | undefined;
 };
 export const useRequestData = async <TBody>(
-  request: Request,
+  request: NextRequest,
   ctx: ApiRequestContext
 ): Promise<RequestData<TBody>> => {
-  if (ctx.params.slug && ctx.params.slug.length > 0) {
-    const resource = (ctx.params.slug[0] as ApiResources) ?? undefined;
-    const id = ctx.params.slug[1] ?? undefined;
-    const method = request.method as MethodType;
-    const operation = ctx.params.slug[2] ?? undefined;
+  try {
+    if (ctx.params.slug && ctx.params.slug.length > 0) {
+      const resource = (ctx.params.slug[0] as ApiResources) ?? undefined;
+      const id = ctx.params.slug[1] ?? undefined;
+      const method = request.method as MethodType;
+      const operation = ctx.params.slug[2] ?? undefined;
+      const session = ctx.session;
+      const params = Object.fromEntries(request.nextUrl.searchParams.entries());
+      const query = params?.q
+        ? (parseUrlParams(params?.q) as QueryParams<any>)
+        : undefined;
+      const body =
+        method === "POST" || method === "PUT" ? ((await request.json()) as TBody) : undefined;
 
-    const body =
-      method === "POST" ? ((await request.json()) as TBody) : undefined;
-
-    if (!resourcesConfig.map((c) => c.path).includes(resource)) {
-      throw NextResponse.json({ error: "Invalid resource!" }, { status: 400 });
+      if (!resourcesConfig.map((c) => c.path).includes(resource)) {
+        throw Error("Invalid resource!");
+      }
+      return {
+        resource,
+        id,
+        method,
+        body,
+        operation,
+        params,
+        query,
+        session
+      };
+    } else if (ctx.params.slug) {
+      // console.log(ctx.params.slug);
     }
-    return {
-      resource,
-      id,
-      method,
-      body,
-      operation
-    };
+    throw Error("Invalid request!");
+  } catch (error: any) {
+    throw Error(error.message);
   }
-  else if (ctx.params.slug){
-    console.log(ctx.params.slug)
-  }
-  throw NextResponse.json({ error: "Invalid request!" }, { status: 400 });
 };

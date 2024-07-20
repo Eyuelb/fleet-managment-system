@@ -1,3 +1,4 @@
+import envConfig from '@/config/dotenv';
 import type { Config } from 'drizzle-kit';
 
 export default {
@@ -6,7 +7,7 @@ export default {
   out: './src/db/sql',
   introspect: { casing: 'camel' },
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: envConfig.databaseUrl,
   },
   verbose: true
 } satisfies Config;

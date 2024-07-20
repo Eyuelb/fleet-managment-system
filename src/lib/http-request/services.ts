@@ -18,6 +18,7 @@ export async function httpDelete<TResponse>(url: string): Promise<TResponse> {
   return {} as TResponse;
 }
 
+import logger from "@utils/logger";
 import {
   ErrorResponse,
   ResponseType,
@@ -27,11 +28,14 @@ import {
 const get = async <T>(url: string): Promise<ResponseType<T>> => {
   try {
     const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = (await response.json()) as SuccessResponse<T>;
     return data;
-  } catch (error) {
-    console.error(error);
-    return error as ErrorResponse;
+  } catch (error: any) {
+    logger.error(error);
+    throw new Error(error?.message);
   }
 };
 
@@ -47,11 +51,14 @@ const post = async <T, P>(
       },
       body: JSON.stringify(payload),
     });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = (await response.json()) as SuccessResponse<{ id: string }>;
     return data;
-  } catch (error) {
-    console.error(error);
-    return error as ErrorResponse;
+  } catch (error: any) {
+    logger.error(error);
+    throw new Error(error?.message);
   }
 };
 
@@ -67,11 +74,14 @@ const update = async <T, P>(
       },
       body: JSON.stringify(payload),
     });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = (await response.json()) as SuccessResponse<T>;
     return data;
-  } catch (error) {
-    console.error(error);
-    return error as ErrorResponse;
+  } catch (error: any) {
+    logger.error(error);
+    throw new Error(error?.message);
   }
 };
 
@@ -86,9 +96,9 @@ const remove = async <T>(
       message: string;
     }>;
     return data;
-  } catch (error) {
-    console.error(error);
-    return error as ErrorResponse;
+  } catch (error: any) {
+    logger.error(error);
+    throw new Error(error?.message);
   }
 };
 

@@ -4,7 +4,7 @@ import tokenService from "@utils/token";
 import { compare } from "bcrypt-ts";
 import { users } from "@db/schema";
 import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@db/index";
 
 async function authenticateUser(email: string, password: string) {
@@ -41,7 +41,7 @@ async function authenticateUser(email: string, password: string) {
 
 // Export handlers
 export const { POST } = {
-  POST: async function (request: Request, ctx: ApiRequestContext) {
+  POST: async function (request: NextRequest, ctx: ApiRequestContext) {
     const body = (await useRequestData(request, ctx)).body as any;
     try {
       const auth = await authenticateUser(body.email, body.password);

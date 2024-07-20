@@ -58,7 +58,7 @@ export type FormBuilderProps<T extends FieldValues> = {
   buttonWrapperProps?: React.HTMLAttributes<HTMLDivElement>;
   renderActionButton?: React.ReactNode;
   title?: string | React.ReactNode;
-};
+}&PropsWithChildren;
 
 export type onChangeAdapterProps = {
   event: React.ChangeEvent<

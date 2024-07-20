@@ -22,6 +22,7 @@ export const FormBuilder: React.FC<FormBuilderProps<FieldValues>> = memo(
     buttonWrapperProps,
     renderActionButton,
     title,
+    children
   }) => {
     const Schema = constructSchema(fields);
     const generatedDValue = contractDefaultValue(fields);
@@ -38,6 +39,7 @@ export const FormBuilder: React.FC<FormBuilderProps<FieldValues>> = memo(
         <FormWrapper onSubmitHandler={onSubmit} className={className}>
           <div className="w-full">{title}</div>
           <Fields fields={fields} />
+          {children}
           {renderActionButton ? (
             renderActionButton
           ) : (

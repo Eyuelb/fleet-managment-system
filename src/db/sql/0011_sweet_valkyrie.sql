@@ -1,0 +1,1 @@
+ALTER TABLE "fleet_request" RENAME COLUMN "trip-status" TO "trip_status";

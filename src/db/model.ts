@@ -7,6 +7,8 @@ export type SchemaNames = ExtractStringLiterals<keyof typeof db.query>;
 export type SchemaType<T extends SchemaNames> = (typeof schema)[T];
 export type Columns<T extends SchemaNames> =
   keyof (typeof schema)[T]["_"]["columns"];
+export type ColumnsType<T extends SchemaNames> =
+  (typeof schema)[T]["_"]["inferSelect"];
 export type PaginatedResponse<T> = {
   data: T[];
   total: number;
@@ -17,7 +19,7 @@ export type Where<T extends SchemaNames> = {
   value: any;
   operator: FilterOperatorKeys;
 };
-export type OrderBy = "ASC" | "DESC"
+export type OrderBy = "ASC" | "DESC";
 // export type Columns<T extends Table> = T['_']['columns'];
 export enum FilterOperators {
   EQ = "=",
@@ -29,3 +31,15 @@ export enum FilterOperators {
   LIKE = "LIKE",
   ILIKE = "ilike",
 }
+
+export type QueryParams<T extends SchemaNames> = {
+  model: T;
+  select?: Columns<T>[];
+  where?: Where<T>[];
+  orderBy?: {
+    direction: OrderBy[];
+    by: Columns<T>[];
+  };
+  offset?: number;
+  limit?: number;
+};

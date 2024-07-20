@@ -24,7 +24,7 @@ const DashBoard = () => {
       icon={card.icon}
       name={card.name}
       number={card.number}
-      onClick={() => router.push(`/create-requests/${card.link}`)}
+      onClick={() => router.push(`/handle-requests/${card.link}`)}
     />
   ));
 

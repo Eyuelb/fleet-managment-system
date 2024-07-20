@@ -2,6 +2,7 @@ import { Box, Burger, Container, Flex, Group } from '@mantine/core';
 import React, { useContext } from 'react';
 import { ThemeToggleButton } from '../theme-toggle-button';
 import { AppLayoutContext } from './main-layout';
+import AuthButton from '@components/auth/logout-button';
 
 const MainHeaderLayout = () => {
   const { sideBarOpened, toggleSidebar } = useContext(AppLayoutContext);
@@ -16,6 +17,7 @@ const MainHeaderLayout = () => {
       </Group>
 
       <Group gap={2}>
+        <AuthButton/>
         <ThemeToggleButton />
         <Burger
           opened={sideBarOpened}

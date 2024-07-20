@@ -25,7 +25,9 @@
       "@styles/*": ["./src/styles/*"],
       "@db/*": ["./src/db/*"],
       "@lib/*": ["./src/lib/*"],
-      "@models/*": ["./src/models/*"]
+      "@models/*": ["./src/models/*"],
+      "@/*": ["./src/*"]
+
 
 
     }

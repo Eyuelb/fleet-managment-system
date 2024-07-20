@@ -38,5 +38,20 @@ export interface MapContextType {
   isLoaded: boolean;
 }
 
+export type LatLng = {
+  lat: number;
+  lng: number;
+  distance?: number;
+};
 
-
+export type LocationData = {
+  point: LatLng;
+  id?: string;
+  name?: string;
+  description?: string;
+};
+export type PathsData = {
+  id?: string;
+  source: LatLng;
+  destination: LatLng;
+};

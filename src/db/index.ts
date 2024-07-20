@@ -1,29 +1,21 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-// import { drizzle } from 'drizzle-orm/neon-http';
-import { Client, Pool } from "pg";
-
-import { neon } from "@neondatabase/serverless";
+import { Pool } from "pg";
 import * as schema from "./schema";
-import { cookies } from "next/headers";
 import { MyLogger } from "./utility/sql-logger";
+import envConfig from "@/config/dotenv";
 
 const config = {
-  connectionString: process.env.DATABASE_URL,
+  connectionString: envConfig.databaseUrl,
 };
-const connectionString = process.env.DATABASE_URL!;
-const client = neon(connectionString);
 const pool = new Pool(config);
-const COOKIE_SESSION = "";
-const ENABLE_LOGS = true;
-pool.on("connect", (client) => {
-  const userId = "";
-
-  let config = `SELECT set_config('app.userId', '${userId}', false); `;
-
+const ENABLE_LOGS = false;
+pool.on("connect", async (client) => {
+  let config = `SELECT set_config('app.user_id', '${'abcd'}', TRUE); `;
   client.query(config);
 });
 
 export const db: NodePgDatabase<typeof schema> = drizzle(pool, {
   schema: schema,
   logger: ENABLE_LOGS ? new MyLogger() : false,
-});
+  
+})

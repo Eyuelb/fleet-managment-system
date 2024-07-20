@@ -22,14 +22,14 @@ const roleDefaults = [
     description: "SuperAdmin",
   },
   {
-    id: "ec0d77af-30f9-4b87-9d02-ceaeef20f259",
-    name: "Admin",
-    description: "Admin",
-  },
-  {
     id: "56a11624-a474-4984-8bdc-e4a62259a162",
     name: "User",
     description: "User",
+  },
+  {
+    id: "ec0d77af-30f9-4b87-9d02-ceaeef20f259",
+    name: "Driver",
+    description: "Driver",
   },
 ];
 const groupDefaults = [
@@ -65,8 +65,6 @@ const unitTypeDefaults = [
 export const runUsersSeeding = async () => {
   console.log("Seeding users...");
   console.time("Users have been seeded!");
-  const firstName = faker.person.firstName();
-  const lastName = faker.person.lastName();
   try {
     const { table, rows } = await generateSeedRows("users", 50, () => ({
       name: `${faker.person.firstName()} ${faker.person.lastName()}`,
@@ -76,7 +74,7 @@ export const runUsersSeeding = async () => {
         provider: "gmail.com",
       }),
       password, // Ensure this is hashed properly if required by your application
-      roleId: faker.helpers.arrayElement(roleDefaults.map((row) => row.id)), // Replace with actual roleId from your roles table
+      role: faker.helpers.arrayElement(roleDefaults.map((row) => row.id)), // Replace with actual roleId from your roles table
       image: faker.image.avatar(),
     }));
 
@@ -117,58 +115,58 @@ export const runRolesSeeding = async () => {
     console.timeEnd("Roles have been seeded!");
   }
 };
-export const runGroupsSeeding = async () => {
-  console.log("Seeding groups...");
-  console.time("Groups have been seeded!");
+// export const runGroupsSeeding = async () => {
+//   console.log("Seeding groups...");
+//   console.time("Groups have been seeded!");
 
-  try {
-    const { table, rows } = await generateSeedRows(
-      "groups",
-      groupDefaults.length,
-      () => ({
-        name: "",
-      })
-    );
+//   try {
+//     const { table, rows } = await generateSeedRows(
+//       "groups",
+//       groupDefaults.length,
+//       () => ({
+//         name: "",
+//       })
+//     );
 
-    await db.delete(table);
-    await db.insert(table).values(groupDefaults).returning({
-      id: table.id,
-    });
+//     await db.delete(table);
+//     await db.insert(table).values(groupDefaults).returning({
+//       id: table.id,
+//     });
 
-    console.log("Groups seeding complete");
-  } catch (error) {
-    console.error("Error seeding groups:", error);
-    process.exit(1);
-  } finally {
-    console.timeEnd("Groups have been seeded!");
-  }
-};
-export const runUnitTypesSeeding = async () => {
-  console.log("Seeding unit types...");
-  console.time("Unit types have been seeded!");
+//     console.log("Groups seeding complete");
+//   } catch (error) {
+//     console.error("Error seeding groups:", error);
+//     process.exit(1);
+//   } finally {
+//     console.timeEnd("Groups have been seeded!");
+//   }
+// };
+// export const runUnitTypesSeeding = async () => {
+//   console.log("Seeding unit types...");
+//   console.time("Unit types have been seeded!");
 
-  try {
-    const { table, rows } = await generateSeedRows(
-      "units",
-      unitTypeDefaults.length,
-      () => ({
-        name: "",
-      })
-    );
+//   try {
+//     const { table, rows } = await generateSeedRows(
+//       "units",
+//       unitTypeDefaults.length,
+//       () => ({
+//         name: "",
+//       })
+//     );
 
-    await db.delete(table);
-    await db.insert(table).values(unitTypeDefaults).returning({
-      id: table.id,
-    });
+//     await db.delete(table);
+//     await db.insert(table).values(unitTypeDefaults).returning({
+//       id: table.id,
+//     });
 
-    console.log("Unit types seeding complete");
-  } catch (error) {
-    console.error("Error seeding unit types:", error);
-    process.exit(1);
-  } finally {
-    console.timeEnd("Unit types have been seeded!");
-  }
-};
+//     console.log("Unit types seeding complete");
+//   } catch (error) {
+//     console.error("Error seeding unit types:", error);
+//     process.exit(1);
+//   } finally {
+//     console.timeEnd("Unit types have been seeded!");
+//   }
+// };
 export const runVehiclesSeeding = async () => {
   console.log("Seeding vehicles...");
   console.time("Vehicles have been seeded!");
@@ -182,6 +180,7 @@ export const runVehiclesSeeding = async () => {
       year: Number(faker.datatype.number({ min: 1990, max: 2023 })),
       licensePlate: faker.vehicle.vrm(),
       status: faker.helpers.arrayElement(["Active", "Inactive"]),
+      driver:`${faker.person.firstName()} ${faker.person.lastName()}`
     }));
 
     await db.delete(table);
@@ -199,10 +198,10 @@ export const runVehiclesSeeding = async () => {
 };
 
 (async () => {
-  await runUsersSeeding();
-  await runRolesSeeding();
-  await runGroupsSeeding();
-  await runUnitTypesSeeding();
+ // await runUsersSeeding();
+ // await runRolesSeeding();
+  // await runGroupsSeeding();
+  // await runUnitTypesSeeding();
   await runVehiclesSeeding();
   process.exit(0);
 })();

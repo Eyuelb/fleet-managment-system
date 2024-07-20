@@ -133,7 +133,7 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     return () => {};
   }, [query.data]);
 
-  return { ...query, data: query.data ? query.data : placeholder };
+  return { ...query, data: query.data ? query.data as T : placeholder as T };
 }
 
 export default useQueryRequest;

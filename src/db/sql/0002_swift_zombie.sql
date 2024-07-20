@@ -1,0 +1,1 @@
+ALTER TABLE "fleet" DROP COLUMN IF EXISTS "status";

@@ -1,7 +1,7 @@
 import React from "react";
 import { Sidebar, SidebarItem } from "./common";
 import { AppShell, ScrollArea } from "@mantine/core";
-import { IconFolderOpen, IconFolderPlus, IconFolderQuestion, IconFolderStar, IconHome, IconSettings, IconSettingsBolt, IconUser, IconUsers } from "@tabler/icons-react";
+import { IconFolderOpen, IconFolderPlus, IconFolderQuestion, IconFolderStar, IconHome, IconMapPinSearch, IconSettings, IconSettingsBolt, IconUser, IconUsers } from "@tabler/icons-react";
 import { iconDefaultProps } from "../../../config/icon";
 const sidebarItems: SidebarItem[] = [
   {
@@ -19,6 +19,11 @@ const sidebarItems: SidebarItem[] = [
     label: "Handle Requests",
     icon: <IconFolderOpen {...iconDefaultProps} />,
     link: "/handle-requests",
+  },
+  {
+    label: "Monitor Vehicle",
+    icon: <IconMapPinSearch {...iconDefaultProps} />,
+    link: "/monitor-vehicle",
   },
   {
     label: "Administration",

@@ -1,8 +1,16 @@
 import * as schema from "@db/schema";
-import { capitalizeTxt } from "./text";
-import { Columns, OrderBy, SchemaNames, SchemaType, Where } from "@db/model";
+import { capitalizeTxt, joinCamelCase, toTittle } from "./text";
+import {
+  Columns,
+  OrderBy,
+  QueryParams,
+  SchemaNames,
+  SchemaType,
+  Where,
+} from "@db/model";
 import { MethodType } from "@models/request";
 import { faker } from "@faker-js/faker";
+import { camelCase } from "lodash";
 
 export function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -62,17 +70,18 @@ export function generateUniqueKey(): string {
 
 export const getSchemaColumns = <T extends SchemaNames>(
   model: T,
-  exclude: Columns<T>[]
+  include?: Columns<T>[],
+  exclude?: Columns<T>[]
 ) => {
   const table = schema[model];
-
   const columns = Object.keys(table ?? {})
-    .filter((data: any) => exclude.includes(data))
+    .filter((data: any) => (include ? include.includes(data) : Boolean))
+    .filter((data: any) => (exclude ? !exclude?.includes(data) : data !== "id"))
     .map((data) => ({
       accessorKey: data,
-      header: capitalizeTxt(data),
+      header: toTittle(joinCamelCase(data, " ")),
     }));
-  return columns;
+  return columns ?? [];
 };
 
 export const getDataSource = <T extends SchemaNames>(
@@ -89,6 +98,68 @@ export const getDataSource = <T extends SchemaNames>(
   };
 };
 
+export const getCustomDataSource = <T extends string>(
+  model: T,
+  valueKey: string,
+  labelKey: string
+) => {
+  return {
+    key: model as any,
+    url: `/api/v1/${model}`,
+    method: "GET" as MethodType,
+    valueKey: valueKey,
+    labelKey: labelKey,
+  };
+};
+export const getDataSourceQuery = <T extends SchemaNames>(
+  model: T,
+  subKey?: any[]
+) => {
+  return {
+    key: model as any,
+    url: `/api/v1/${joinCamelCase(model, "-")}`,
+    method: "GET" as MethodType,
+    queryKey: [model as string, ...(subKey ?? [])],
+  };
+};
+export const getDataSourceById = <T extends SchemaNames>(
+  model: T,
+  id: string
+) => {
+  return {
+    key: model as any,
+    url: `/api/v1/${joinCamelCase(model, "-")}/${id}`,
+    method: "GET" as MethodType,
+    queryKey: [model as string, id],
+  };
+};
+export const getDataSourceMutation = <T extends SchemaNames>(
+  model: T,
+  method: MethodType,
+  id?: string
+) => {
+  return {
+    key: model as any,
+    url: `/api/v1/${joinCamelCase(model, "-")}/${id}`,
+    method: method,
+    queryKey: [model as string],
+  };
+};
+export const updateStatus = <T extends SchemaNames>(
+  model: T,
+  id: string,
+  status: string
+) => {
+  return {
+    key: model as any,
+    url: `/api/v1/status/${joinCamelCase(model, "-")}/${id}`,
+    method: "POST" as MethodType,
+    queryKey: [model as string, "update", status],
+    body: {
+      status,
+    },
+  };
+};
 export function forEach(obj: any, fn: any): any {
   Object.keys(obj).forEach((key) => {
     return fn(obj[key], key);
@@ -107,15 +178,30 @@ export const generateSeedRows = async <T extends SchemaNames>(
   return { table, rows };
 };
 
-export const generateQueryParams = <T extends SchemaNames>({model,...props}: {
-  model: T;
-  select?: Columns<T>[];
-  where: Where<T>[];
-  orderBy: OrderBy;
-  offset: number;
-  limit: number;
-}) => {
-
-  return JSON.stringify(createSearchParams(props))
-
+export const generateQueryParams = <T extends SchemaNames>({
+  model,
+  ...props
+}: QueryParams<T>) => {
+  return { ...props, model };
 };
+function convertValue(rawValue: string): any {
+  if (rawValue === "true" || rawValue === "false") {
+    return rawValue === "true";
+  }
+
+  return rawValue;
+}
+
+export function createUrlParams(obj: Record<string, any>): string {
+  const queryString = Object.keys(obj)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
+    .join("&");
+  return queryString;
+}
+export function parseUrlParams(
+  searchParamsString: string
+): Record<string, any> {
+  const decodedString = JSON.parse(searchParamsString);
+
+  return decodedString;
+}

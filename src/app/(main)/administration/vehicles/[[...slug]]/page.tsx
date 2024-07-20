@@ -1,8 +1,6 @@
 "use client";
-import { vehicles } from "@db/schema";
 import { EntityProvider } from "@lib/entity/provider";
 import { getSchemaColumns } from "@utils/helper";
-import { capitalizeTxt } from "@utils/text";
 import React from "react";
 
 const resource = "vehicles";
@@ -62,7 +60,6 @@ const EntityLayout: React.FC = () => {
           "licensePlate",
           "make",
           "status",
-          "type",
           "year",
         ]),
       }}

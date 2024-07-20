@@ -10,23 +10,24 @@ export const resourcesConfig = [
     model: schema.roles,
   },
   {
-    path: "groups",
-    model: schema.groups,
-  },
-  {
     path: "vehicles",
     model: schema.vehicles,
   },
   {
-    path: "routes",
-    model: schema.routes,
+    path: "fleet-request",
+    model: schema.fleetRequest,
   },
   {
-    path: "fleet",
-    model: schema.fleet,
+    path: "maintenance-request",
+    model: schema.maintenanceRequest,
   },
   {
-    path: "services",
-    model: schema.serviceRequest,
+    path: "fuel-request",
+    model: schema.fuelRequest,
   },
 ] as const;
+
+type Paths = typeof resourcesConfig[number]['path']
+export const getSource = (path:Paths) => {
+    return resourcesConfig.find((d)=>d.path === path) as typeof resourcesConfig[number]
+}

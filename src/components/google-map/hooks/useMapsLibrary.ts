@@ -5,7 +5,10 @@ import { useLoadScript } from "@react-google-maps/api";
 export function useMapsLibrary<
   K extends keyof MapApiLibraries,
   V extends MapApiLibraries[K]
->(name: K): V | null;
+>(name: K): {
+  lib:V | null,
+  isLoaded: boolean
+};
 
 export function useMapsLibrary(name: string) {
   const { isLoaded } = useLoadScript({
@@ -47,5 +50,8 @@ export function useMapsLibrary(name: string) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, name]);
 
-  return loadedLibraries[name] || null;
+  return {
+    lib:loadedLibraries[name] || null,
+    isLoaded
+  };
 }

@@ -7,10 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "drizzle:studio": "drizzle-kit studio",
-    "drizzle:generate": "npx drizzle-kit generate",
-    "drizzle:push": "drizzle-kit push",
-    "drizzle:seed": "npx tsx -r dotenv/config ./src/db/seed.ts"
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:pull": "drizzle-kit introspect",
+    "db:studio": "npx drizzle-kit studio",
+    "db:seed": "npx tsx -r dotenv/config ./src/db/seed.ts",
+    "db:drop": "drizzle-kit drop",
+    "schema": "drizzle-kit introspect && drizzle-kit drop "
+
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -23,11 +27,14 @@
     "@neondatabase/serverless": "^0.9.3",
     "@next/bundle-analyzer": "^14.1.3",
     "@react-google-maps/api": "^2.19.3",
+    "@supabase/ssr": "^0.4.0",
+    "@supabase/supabase-js": "^2.44.3",
     "@tabler/icons-react": "^3.3.0",
     "@tanstack/react-query": "^5.32.0",
     "bcrypt-ts": "^5.0.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
     "export-to-csv": "^1.3.0",

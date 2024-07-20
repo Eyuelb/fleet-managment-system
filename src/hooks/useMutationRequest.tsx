@@ -26,7 +26,7 @@ interface MutationRequestProps<T, Args = any>
 function useMutationRequest<T, Args>(props: MutationRequestProps<T, Args>) {
   const {
     url: bUrl,
-    method = "Post",
+    method = "POST",
     params: bParams,
     placeholder = [],
     enabled,

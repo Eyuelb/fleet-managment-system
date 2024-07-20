@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   timestamp,
   pgTable,
@@ -7,12 +8,13 @@ import {
   integer,
   numeric,
   pgEnum,
-  json,
-  doublePrecision,
 } from "drizzle-orm/pg-core";
 const common = {
-  id: uuid("id").primaryKey().defaultRandom(),
-  createdAt: timestamp("createdAt", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`uuid_generate_v4()`)
+    .notNull(),
+  createdAt: timestamp("created_at", {
     precision: 6,
     withTimezone: true,
     mode: "string",
@@ -22,10 +24,24 @@ const common = {
   updatedAt: timestamp("updated_at", { withTimezone: true, mode: "string" })
     .defaultNow()
     .notNull(),
+  createdBy: text("created_by"),
+  updatedBy: text("updated_by"),
 };
-export const statusEnum = pgEnum("statusEnum", ["Submitted", "Approved", "Rejected"]);
-export const requestEnum = pgEnum("requestEnum", ["Fuel", "Maintenance","Fleet"]);
-
+export const tripStatus = pgEnum("trip_status", [
+  "Completed",
+  "OnGoing",
+  "Cancelled",
+  "YetToStart",
+]);
+export const requestStatus = pgEnum("request_status", [
+  "Submitted",
+  "Approved",
+  "Rejected",
+]);
+export const visibilityStatus = pgEnum("visibility_status", [
+  "Active",
+  "Inactive",
+]);
 export const users = pgTable("users", {
   ...common,
   name: text("name").notNull(),
@@ -34,72 +50,88 @@ export const users = pgTable("users", {
   access_token: text("access_token"),
   password: text("password"),
   image: text("image"),
-  roleId: uuid("roleId"),
+  role: text("role"),
 });
 export const roles = pgTable("roles", {
   ...common,
   name: text("name").notNull(),
   description: text("description"),
 });
-export const groups = pgTable("groups", {
-  ...common,
-  name: text("name").notNull(),
-  description: text("description"),
-});
-export const units = pgTable("units", {
-  ...common,
-  name: text("name").notNull(),
-  description: text("description"),
-});
-export const userGroup = pgTable("userGroup", {
-  ...common,
-  userId: uuid("userId").notNull(),
-  groupId: uuid("groupId").notNull(),
-});
-
-export const userUnit = pgTable("userUnit", {
-  ...common,
-  userId: uuid("userId").notNull(),
-  unitId: uuid("unitId").notNull(),
-});
 
 export const vehicles = pgTable("vehicles", {
   ...common,
   name: text("name").notNull(),
-  type: text("type"),
+  fuelType: text("type"),
   make: text("make"),
   model: text("model"),
   year: integer("year"),
-  licensePlate: text("licensePlate"),
-  status: text("status"),
+  licensePlate: text("license_plate"),
+  vehicleIdentificationNumber: text("vehicle_identification_number"),
+  seatCapacity: text("seat_capacity"),
+  driver: text("driver"),
+  location: text("location"),
+  lat: text("lat"),
+  lng: text("lng"),
+  status: visibilityStatus("status"),
 });
 
-export const routes = pgTable("routes", {
+export const fuelRequest = pgTable("fuel_request", {
   ...common,
-  name: text("routeName").notNull().unique(),
-  startLocation: text("startLocation"),
-  endLocation: text("endLocation"),
+  driver: text("driver").notNull(),
+  vehicle: text("vehicle").notNull(),
+  fuelType: text("fuel_type").notNull(),
+  fuelingDateTime: timestamp("fueling_date_time", {
+    precision: 6,
+    withTimezone: true,
+    mode: "string",
+  }).notNull(),
+  gallonsLitersOfFuel: numeric("gallons_liters_of_fuel").notNull(),
+  costPerGallonLiter: numeric("cost_per_gallon_liter").notNull(),
+  totalCost: numeric("total_cost").notNull(),
+  requestedFor: text("requested_for"),
+  requestedBy: text("requested_by"),
+  approvedBy: text("approved_by"),
+  note: text("note"),
+  status: requestStatus("status"),
+});
+export const maintenanceRequest = pgTable("maintenance_request", {
+  ...common,
+  driver: text("driver").notNull(),
+  vehicle: text("vehicle").notNull(),
+  maintenanceType: text("maintenance_type").notNull(),
+  maintenanceServiceProviderName: text(
+    "maintenance_service_provider_name"
+  ).notNull(),
+  maintenanceDateTime: timestamp("maintenance_date_time", {
+    precision: 6,
+    withTimezone: true,
+    mode: "string",
+  }).notNull(),
+  cost: numeric("cost").notNull(),
+  chargeBearBy: text("charge_bear_by"),
+  requestedFor: text("requested_for"),
+  requestedBy: text("requested_by"),
+  approvedBy: text("approved_by"),
+  note: text("note"),
+  status: requestStatus("status"),
+});
+
+export const fleetRequest = pgTable("fleet_request", {
+  ...common, // User or group responsible
+  driver: text("driver").notNull(),
+  vehicle: text("vehicle").notNull(),
+  workGroup: text("work_group"),
+  startLocation: text("start_location"),
+  endLocation: text("end_location"),
   startX: text("startX"),
   startY: text("startY"),
   endX: text("endX"),
   endY: text("endY"),
   distance: text("distance"),
-  meta: json("meta"),
-});
-
-export const serviceRequest = pgTable("serviceRequest", {
-  ...common,
-  userId: uuid("userId").notNull(),
-  request: requestEnum("requestEnum"),
-  userGroupId: uuid("userGroupId"),
-  userUnitId: uuid("userUnitId"),
-});
-
-export const fleet = pgTable("fleet", {
-  ...common,
-  vehicleId: uuid("vehicleId"),
-  driverId: uuid("driverId"),
-  routeId: uuid("routeId"),
-  approvedBy: uuid("approvedBy"),
-  status: statusEnum("statusEnum"),
+  requestedFor: text("requested_for"),
+  requestedBy: text("requested_by"),
+  approvedBy: text("approved_by"),
+  note: text("note"),
+  tripStatus: tripStatus("trip_status"),
+  status: requestStatus("status"),
 });
