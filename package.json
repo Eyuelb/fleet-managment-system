@@ -14,7 +14,6 @@
     "db:seed": "npx tsx -r dotenv/config ./src/db/seed.ts",
     "db:drop": "drizzle-kit drop",
     "schema": "drizzle-kit introspect && drizzle-kit drop "
-
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -48,6 +47,7 @@
     "next-nprogress-bar": "^2.3.12",
     "pg": "^8.12.0",
     "react": "^18",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "sass": "^1.77.6",

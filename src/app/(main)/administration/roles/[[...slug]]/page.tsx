@@ -1,4 +1,5 @@
 "use client";
+import { allRoutes } from "@/config/menu";
 import { EntityProvider } from "@lib/entity/provider";
 import React from "react";
 
@@ -10,7 +11,7 @@ const EntityLayout: React.FC = () => {
         isCreate: true,
         isList: true,
         isUpdate: true,
-        isView: true,
+        isView: false,
         isDelete: true,
       }}
       state={{
@@ -80,8 +81,15 @@ const EntityLayout: React.FC = () => {
           {
             name: "description",
             label: "Description",
-            type: 'textarea',
+            type: "textarea",
             condition: ["required"],
+          },
+          {
+            name: "resources",
+            label: "Resources",
+            type: "multi-select",
+            data: allRoutes,
+            defaultValue:[],
           },
         ],
       }}

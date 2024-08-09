@@ -12,6 +12,8 @@ import {
 } from "@mantine/core";
 import { CardItemProps } from "./model";
 import formatData from "@utils/data-converter";
+import { IconAlarm, IconClock } from "@tabler/icons-react";
+import { iconDefaultProps } from "@/config/icon";
 
 const CardItem: React.FC<CardItemProps> = (props) => {
   const { onChange, isSelected, selectable, data } = props;
@@ -37,11 +39,8 @@ const CardItem: React.FC<CardItemProps> = (props) => {
         <Flex className="flex-col gap-1 w-full ">
           <Stack gap="xs">
             <Group justify="space-between">
-              <Group className="gap-2">
-                <Text fz={12} c="dimmed" truncate>
-                  {data.from}
-                </Text>
-                <Text fz={12}>.</Text>
+              <Group className="gap-1">
+                <IconAlarm {...iconDefaultProps} size={14} />
 
                 <Text fz={12}>
                   {formatData({

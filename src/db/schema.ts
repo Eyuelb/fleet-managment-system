@@ -56,6 +56,7 @@ export const roles = pgTable("roles", {
   ...common,
   name: text("name").notNull(),
   description: text("description"),
+  resources:text("resources").array().$defaultFn(()=>[])
 });
 
 export const vehicles = pgTable("vehicles", {

@@ -1,4 +1,5 @@
 import * as schema from "@db/schema";
+import { sidebarItems } from "./menu";
 
 export const resourcesConfig = [
   {
@@ -31,3 +32,5 @@ type Paths = typeof resourcesConfig[number]['path']
 export const getSource = (path:Paths) => {
     return resourcesConfig.find((d)=>d.path === path) as typeof resourcesConfig[number]
 }
+
+
