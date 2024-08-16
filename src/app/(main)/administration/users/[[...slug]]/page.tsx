@@ -62,6 +62,10 @@ const EntityLayout: React.FC = () => {
             accessorKey: "email",
             header: "Email",
           },
+          {
+            accessorKey: "role",
+            header: "Role",
+          },
         ],
       }}
       form={{

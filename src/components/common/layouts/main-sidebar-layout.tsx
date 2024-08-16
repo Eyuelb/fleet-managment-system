@@ -7,11 +7,8 @@ import { getAllowedRoutes } from "@lib/auth/auth.guard";
 
 export const SidebarLayout = () => {
   const user = useAuthUser();
-  const resources = user?.role?.resources
-    ? [...user?.role?.resources, ...["/"]]
-    : [];
   const allowedRoutes = useMemo(
-    () => getAllowedRoutes(sidebarItems, resources),
+    () => getAllowedRoutes(sidebarItems, user?.role?.resources ?? []),
     [user?.role]
   );
   return (

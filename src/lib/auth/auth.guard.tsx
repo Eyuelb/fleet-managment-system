@@ -48,21 +48,21 @@ function isResourceAllowed(resource?: string, resources?: string[]): boolean {
   return resources?.some((res) => resource?.includes(res)) ?? false;
 }
 // Function to get allowed routes from the menuLinks array
-export  function getAllowedRoutes(
+export function getAllowedRoutes(
   menuLinks: SidebarLinks[],
   resources: string[]
 ): SidebarLinks[] {
   return menuLinks
     .filter((menuItem) => {
-      // Check if the main link is allowed
+      // Check if the main link is allowed, but exclude '/'
       const isLinkAllowed = menuItem.link
-        ? isResourceAllowed(menuItem.link, resources)
+        ? menuItem.link !== '/' && isResourceAllowed(menuItem.link, resources)
         : false;
 
-      // Check if any item link is allowed if there are items
+      // Check if any item link is allowed if there are items, excluding '/'
       const allowedItems = menuItem.items
-        ? menuItem.items.filter((item) =>
-            isResourceAllowed(item?.link, resources)
+        ? menuItem.items.filter(
+            (item) => item.link !== '/' && isResourceAllowed(item?.link, resources)
           )
         : [];
 
@@ -70,10 +70,10 @@ export  function getAllowedRoutes(
     })
     .map((menuItem) => ({
       ...menuItem,
-      // Filter the items based on allowed resources
+      // Filter the items based on allowed resources, excluding '/'
       items:
-        menuItem.items?.filter((item) =>
-          isResourceAllowed(item.link, resources)
+        menuItem.items?.filter(
+          (item) => item.link !== '/' && isResourceAllowed(item.link, resources)
         ) || undefined,
     }));
 }
