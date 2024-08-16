@@ -26,8 +26,10 @@ import { tripStatus } from "@db/schema";
 import { CardList } from "@components/card-list";
 import { ColumnsType } from "@db/model";
 import QueryButton from "@components/common/query-button";
-const resource = "fleetRequest";
+import { useAuthUser } from "@lib/auth/auth.hooks";
+const resource = "fuelRequest";
 const DataDisplay = () => {
+  const user = useAuthUser();
   const { get, register, isLoaded, isEmpty, reset } = useSearchParamsShallow();
   const { rowSelection, ...tableState } = useDataTableContext();
   const queryParams = generateQueryParams({
@@ -39,8 +41,7 @@ const DataDisplay = () => {
       "requestedBy",
       "requestedFor",
       "status",
-      "startLocation",
-      "endLocation",
+      "fuelType"
     ],
     where: [
       {
@@ -58,6 +59,11 @@ const DataDisplay = () => {
         operator: "EQ",
         value: get("status"),
       },
+      {
+        column: "createdBy",
+        operator: "ILIKE",
+        value: "ee310dcb-b2e2-4dbf-8331-a07459d8bbcf",
+      },
     ],
     orderBy: {
       by: ["id"],
@@ -65,9 +71,9 @@ const DataDisplay = () => {
     },
   });
   const { data, isLoading, isFetching, refetch } = useDynamicRequest<{
-    content: ColumnsType<"fleetRequest">[];
+    content: ColumnsType<"fuelRequest">[];
   }>({
-    ...getDataSourceQuery("fleetRequest",[queryParams]),
+    ...getDataSourceQuery("fuelRequest", [queryParams]),
     queryKey: [resource, "list", queryParams],
     queryParams: queryParams,
     dataType: "paginated",
@@ -76,7 +82,7 @@ const DataDisplay = () => {
     enabled: isLoaded,
   });
   const columns = useMemo(
-    () => getSchemaColumns("fleetRequest", queryParams.select),
+    () => getSchemaColumns("fuelRequest", queryParams.select),
     [queryParams.select]
   );
   return (
@@ -122,36 +128,17 @@ const DataDisplay = () => {
       </Flex>
       <CardList
         items={data?.content?.map((d) => ({
-          title: `${d.startLocation} - ${d.endLocation}`,
+          title: `${d.fuelType} - ${d.vehicle}`,
           description: d.requestedFor ?? "",
           id: d.id,
           time: d.createdAt,
           from: d.requestedBy ?? "",
-          status: <Badge size="xs" variant="light">{d.status}</Badge>,
-          action: (
-            <>
-              {d.tripStatus === "YetToStart" && (
-                <Group>
-                  <QueryButton
-                    {...updateStatus("fleetRequest", d.id, "Completed")}
-                    onSuccess={() => refetch()}
-                  >
-                    <Button size="xs" color="green">
-                      Completed
-                    </Button>
-                  </QueryButton>
-                  <QueryButton
-                    {...updateStatus("fleetRequest", d.id, "Cancelled")}
-                    onSuccess={() => refetch()}
-                  >
-                    <Button size="xs" color="red">
-                      Cancel
-                    </Button>
-                  </QueryButton>
-                </Group>
-              )}
-            </>
+          status: (
+            <Badge size="xs" variant="light">
+              {d.status}
+            </Badge>
           ),
+      
         }))}
       />
     </div>

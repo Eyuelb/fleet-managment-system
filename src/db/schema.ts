@@ -56,7 +56,9 @@ export const roles = pgTable("roles", {
   ...common,
   name: text("name").notNull(),
   description: text("description"),
-  resources:text("resources").array().$defaultFn(()=>[])
+  resources: text("resources")
+    .array()
+    .$defaultFn(() => []),
 });
 
 export const vehicles = pgTable("vehicles", {
@@ -134,5 +136,8 @@ export const fleetRequest = pgTable("fleet_request", {
   approvedBy: text("approved_by"),
   note: text("note"),
   tripStatus: tripStatus("trip_status"),
+  type: text("type"),
+  departureDate: text("departure_date"),
+  
   status: requestStatus("status"),
 });

@@ -1,0 +1,1 @@
+ALTER TABLE "fleet_request" ADD COLUMN "departureDate" text;

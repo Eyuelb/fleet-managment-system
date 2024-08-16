@@ -5,8 +5,10 @@ import RootStyleRegistry from "./mantine";
 import AppProgressBar from "@components/common/progress-bar";
 import ReactQueryProvider from "../providers/ReactQueryClientProvider";
 import { DataSourceProvider } from "../providers/DataSourceProvider";
-import { AuthProvider } from "@/providers/AuthProvider";
 import supabaseServer from "@lib/supabase/server";
+import { AuthProvider } from "@/lib/auth/auth.provider";
+import { AuthProvider as AuthProviderS } from "@/providers/AuthProvider";
+import { getSession } from "@/lib/auth/auth.service";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +22,11 @@ export default async function  RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getSession();
  return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <AuthProvider >
+        <AuthProvider session={session} >
           <ReactQueryProvider>
             <RootStyleRegistry>
               <AppProgressBar>

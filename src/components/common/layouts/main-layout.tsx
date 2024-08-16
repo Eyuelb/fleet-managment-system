@@ -36,11 +36,11 @@ export const MainLayout = (props: PropsWithChildren) => {
         <AppShell.Header
           h={60}
           ref={ref}
-          className={RemoveScroll.classNames.zeroRight}
+          className={`${RemoveScroll.classNames.zeroRight} shadow-md`}
         >
           <MainHeaderLayout />
         </AppShell.Header>
-        <AppShell.Navbar bg="var(--card)">
+        <AppShell.Navbar bg="var(--mantine-color-blue-9)">
           <SidebarLayout />
         </AppShell.Navbar>
         <AppShell.Main bg="var(--mantine-color-body)">

@@ -1,7 +1,7 @@
 "use client";
 import MapComponent from "@components/google-map/components/map-component";
 import React, { useMemo, useState } from "react";
-import { Box, Flex, Group, Tabs, Text } from "@mantine/core";
+import { Box, Flex, Group, Paper, Tabs, Text } from "@mantine/core";
 import MapLocationMarkers from "@components/google-map/components/map-location-markers";
 import { generateQueryParams, getDataSourceQuery } from "@utils/helper";
 import { ColumnsType } from "@db/model";
@@ -61,7 +61,7 @@ const MapLayout = (props: Props) => {
 
   return (
     <Flex className="size-full">
-      <Box className="max-w-[330px] min-h-[90dvh] size-full bg-[var(--card)] p-3">
+      <Paper shadow="md" className="max-w-[330px] min-h-[90dvh] size-full bg-[var(--card)] p-3">
         <Tabs defaultValue="fleet" onChange={setDisplay}>
           <Tabs.List justify="center">
             <Tabs.Tab value="fleet">Fleet Monitor</Tabs.Tab>
@@ -83,7 +83,7 @@ const MapLayout = (props: Props) => {
             />
           </Tabs.Panel>
         </Tabs>
-      </Box>
+      </Paper>
       <Box className="flex-1">
         {display === "fleet" && (
           <>

@@ -1,0 +1,1 @@
+ALTER TABLE "fleet_request" RENAME COLUMN "departureDate" TO "departure_date";

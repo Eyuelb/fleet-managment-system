@@ -9,8 +9,6 @@ import { createSearchParams } from "@utils/helper";
 import { get, post } from "../lib/http-request/services";
 import { MethodType } from "../models/request";
 
-
-
 interface SortStatusType {
   columnAccessor: string;
   direction: string;
@@ -20,6 +18,9 @@ interface QueryRequestProps<T> extends QueryOptions {
   method?: MethodType;
   dataType?: "paginated" | "un-paginated" | undefined;
   params?: {
+    [key: string]: any;
+  };
+  queryParams?: {
     [key: string]: any;
   };
   placeholder?: T;
@@ -47,10 +48,9 @@ interface QueryRequestProps<T> extends QueryOptions {
 
 type PatinationData<T> = {
   content?: T;
-  totalElements?: number;
-  number?: number;
-  totalPages?: number;
-  size?: number;
+  total?: number;
+  offset?: number;
+  limit?: number;
 };
 function useQueryRequest<T>(props: QueryRequestProps<T>) {
   const {
@@ -58,6 +58,7 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     method = "GET",
     dataType = "un-paginated",
     params: bParams,
+    queryParams,
     placeholder = [],
     enabled,
     setData,
@@ -68,20 +69,33 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     pagination,
     refetchInterval,
     ...queryProps
-    
   } = props;
 
   const pageNumber = pagination?.pageIndex ?? 1;
   const pageSize = pagination?.pageSize ?? 1;
 
+  // const params = createSearchParams({
+  //   ...(dataType === "paginated"
+  //     ? {
+  //         page: (pageNumber - 1) as number,
+  //         size: pageSize as number,
+  //         sort: `id,${sortStatus?.direction ?? ""}`,
+  //       }
+  //     : {}),
+  //   ...bParams,
+  // });
   const params = createSearchParams({
     ...(dataType === "paginated"
       ? {
-          page: (pageNumber - 1) as number,
-          size: pageSize as number,
-          sort: `id,${sortStatus?.direction ?? ""}`,
+          q: JSON.stringify({
+            offset: pageNumber - 1,
+            limit: pageSize,
+            orderBy: { by: ["id"], direction: ["ASC"] },
+            ...queryParams,
+          }),
         }
-      : {}),
+      : {
+        }),
     ...bParams,
   });
   const url = params ? `${bUrl}?${params}` : `${bUrl}`;
@@ -108,20 +122,9 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     if (dataType === "paginated") {
       if (query.data) {
         const data = query.data as PatinationData<T>;
+        console.log(data.content);
         data.content && setData && setData(data.content);
-        ///
-        data.totalElements &&
-          setDataTotalCount &&
-          setDataTotalCount(data.totalElements);
-        data.size && setPageSize && setPageSize(data.size);
-
-        if (data.size && data.number && setPagination) {
-          if (query.data)
-            setPagination({
-              pageIndex: data.number + 1,
-              pageSize: data.size,
-            });
-        }
+        data.total && setDataTotalCount && setDataTotalCount(data.total);
       }
     }
     if (dataType === "un-paginated") {
@@ -133,7 +136,10 @@ function useQueryRequest<T>(props: QueryRequestProps<T>) {
     return () => {};
   }, [query.data]);
 
-  return { ...query, data: query.data ? query.data as T : placeholder as T };
+  return {
+    ...query,
+    data: query.data ? (query.data as T) : (placeholder as T),
+  };
 }
 
 export default useQueryRequest;

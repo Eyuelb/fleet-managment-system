@@ -76,6 +76,9 @@ const ListComponent = <TData extends MRT_RowData>() => {
       ...listQuery?.params,
       ...filterValues,
     },
+    queryParams:{
+      model: resource
+    }
   });
 
   return (

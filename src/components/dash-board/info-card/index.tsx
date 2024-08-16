@@ -34,13 +34,15 @@ const InfoCard: React.FC<InfoCardProps> = ({
 }) => {
   return (
     <Paper
-      shadow="sm"
+      shadow="xs"
       p="lg"
       radius="xl"
-      withBorder
-      bg="var(--card)"
+      
+      //withBorder
+      //  bg="#ffffff3d"
+       bg="var(--card)"
       w="100%"
-      className=" transition duration-300 ease-in-out transform hover:border-2  hover:border-[var(--mantine-color-primary-7)] cursor-pointer"
+      className=" transition duration-300 ease-in-out transform hover:border-1  cursor-pointer"
       {...props}
     >
       <Flex className=" justify-end items-center">
@@ -50,17 +52,17 @@ const InfoCard: React.FC<InfoCardProps> = ({
       </Flex>
       <Group align="center" display={"apart"}>
         <div className="flex items-center space-x-2">
-          <Text fz={26} fw={500}>
+          <Text fz={26} fw={500} >
             {name}
           </Text>
         </div>
       </Group>
       <Flex mt="md" className="w-full justify-between items-center">
-        <ThemeIcon variant="light" size={60} className=" rounded-full">
+        <ThemeIcon variant="light" size={60}  className=" rounded-full">
           <Icon size={44} stroke={1.2} />
         </ThemeIcon>
 
-        <ActionIcon variant="transparent" size={48}>
+        <ActionIcon  size={48}  className=" rounded-full">
           <IconArrowRight size={46} stroke={0.9} />
         </ActionIcon>
       </Flex>

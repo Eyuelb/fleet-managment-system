@@ -11,7 +11,7 @@ const EntityLayout: React.FC = () => {
         isCreate: true,
         isList: true,
         isUpdate: true,
-        isView: true,
+        isView: false,
         isDelete: true,
       }}
       state={{
@@ -20,7 +20,7 @@ const EntityLayout: React.FC = () => {
       dataProviders={{
         list: {
           url: () => `/api/v1/${resource}`,
-          dataType: "un-paginated",
+          dataType: "paginated",
           method: "GET",
         },
         create: {
@@ -58,7 +58,6 @@ const EntityLayout: React.FC = () => {
           "name",
           "model",
           "licensePlate",
-          "make",
           "status",
           "year",
         ]),
@@ -77,10 +76,22 @@ const EntityLayout: React.FC = () => {
             condition: ["required"],
           },
           {
-            name: "description",
-            label: "Description",
-            type: "textarea",
+            name: "model",
+            label: "Model",
+            type: "text",
             condition: ["required"],
+          },
+          {
+            name: "licensePlate",
+            label: "License Plate",
+            type: "text",
+            condition: ["required"],
+          },
+          {
+            name: "year",
+            label: "Year",
+            type: "number",
+            condition: ["number"],
           },
         ],
       }}

@@ -26,6 +26,7 @@ import { tripStatus } from "@db/schema";
 import { CardList } from "@components/card-list";
 import { ColumnsType } from "@db/model";
 import QueryButton from "@components/common/query-button";
+import BottomToolbar from "@lib/data-table/components/bottom-toolbar";
 const resource = "fleetRequest";
 const DataDisplay = () => {
   const { get, register, isLoaded, isEmpty, reset } = useSearchParamsShallow();
@@ -67,7 +68,7 @@ const DataDisplay = () => {
   const { data, isLoading, isFetching, refetch } = useDynamicRequest<{
     content: ColumnsType<"fleetRequest">[];
   }>({
-    ...getDataSourceQuery("fleetRequest",[queryParams]),
+    ...getDataSourceQuery("fleetRequest", [queryParams]),
     queryKey: [resource, "list", queryParams],
     queryParams: queryParams,
     dataType: "paginated",
@@ -127,7 +128,11 @@ const DataDisplay = () => {
           id: d.id,
           time: d.createdAt,
           from: d.requestedBy ?? "",
-          status: <Badge size="xs" variant="light">{d.status}</Badge>,
+          status: (
+            <Badge size="xs" variant="light">
+              {d.status}
+            </Badge>
+          ),
           action: (
             <>
               {d.tripStatus === "YetToStart" && (
@@ -154,6 +159,7 @@ const DataDisplay = () => {
           ),
         }))}
       />
+      <BottomToolbar/>
     </div>
   );
 };

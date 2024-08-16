@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import logger from "@utils/logger";
-import { Session, User } from "@supabase/supabase-js";
 import { apiAuthenticate } from "./apiAuthenticate";
 import { ApiRequestContext } from "@models/request";
+import { Session } from "@lib/auth/auth.model";
 
 // Define the type for the handler function
 type Handler = (request: NextRequest, ctx: any) => Promise<NextResponse>;
@@ -11,8 +11,8 @@ type Handler = (request: NextRequest, ctx: any) => Promise<NextResponse>;
 interface WrapperOptions {
   withAuth?: boolean;
 }
-type SupaResponse<T> =
-  | Session
+type Response<T> =
+  | T
   | {
       error: Error;
     }
@@ -50,7 +50,7 @@ const apiWrapper = (handler: Handler, options?: WrapperOptions) => {
 export default apiWrapper;
 
 export function isResponseOk<T extends Session>(
-  response: SupaResponse<T> | undefined
+  response: Response<T> | undefined
 ): response is T {
   return (
     response !== undefined &&

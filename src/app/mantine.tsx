@@ -16,16 +16,16 @@ export default function RootStyleRegistry({
     ...baseTheme,
     colors: {
       primary: [
-        "#fff8e1",
-        "#ffefcc",
-        "#ffdd9b",
-        "#ffca64",
-        "#ffba38",
-        "#ffb01b",
-        "#ffab09",
-        "#e39500",
-        "#ca8500",
-        "#af7100"
+        "#eaf3ff",
+        "#d5e4fb",
+        "#abc6f0",
+        "#7da6e7",
+        "#578bdd",
+        "#3f79da",
+        "#3171d9",
+        "#2260c1",
+        "#1955ad",
+        "#01499a"
       ],
     },
   };

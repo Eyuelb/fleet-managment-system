@@ -140,7 +140,7 @@ export const getDataSourceMutation = <T extends SchemaNames>(
 ) => {
   return {
     key: model as any,
-    url: `/api/v1/${joinCamelCase(model, "-")}/${id}`,
+    url: `/api/v1/${joinCamelCase(model, "-")}${id ? "/" + id : ""}`,
     method: method,
     queryKey: [model as string],
   };
@@ -180,9 +180,12 @@ export const generateSeedRows = async <T extends SchemaNames>(
 
 export const generateQueryParams = <T extends SchemaNames>({
   model,
+  where,
   ...props
 }: QueryParams<T>) => {
-  return { ...props, model };
+  const fWhere = where?.filter((w)=>w.value).filter(Boolean)
+
+  return { ...props,where:fWhere, model };
 };
 function convertValue(rawValue: string): any {
   if (rawValue === "true" || rawValue === "false") {

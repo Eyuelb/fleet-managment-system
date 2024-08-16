@@ -1,26 +1,65 @@
-import { useRequestData } from "@hooks/useRequestData";
 import { ApiRequestContext } from "@models/request";
 import tokenService from "@utils/token";
 import { compare } from "bcrypt-ts";
 import { users } from "@db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@db/index";
+import { setCookieSession } from "@lib/auth/auth.service";
+import { SchemaType } from "@db/model";
 
-async function authenticateUser(email: string, password: string) {
-  try {
-    const result = await db.select().from(users).where(eq(users.email, email));
-    if (result.length === 0) {
-      throw new Error("Authentication Failed");
-    }
+// Export handlers
+export const { POST } = {
+  POST: async function (request: NextRequest, ctx: ApiRequestContext) {
+    const body = await request.json();
+    try {
+      if (!body.email || !body.password) {
+        return NextResponse.json(
+          { message: "Invalid Request" },
+          { status: 401 }
+        );
+      }
+      const { rows } = await db.execute(
+        sql.raw(`
+          SELECT users.id, users.name, users.email, users.refresh_token, users.access_token, users.password, users.image, users.created_by, users.updated_by, json_build_object(
+            'id', roles.id,
+            'name', roles.name,
+            'description', roles.description,
+            'resources', roles.resources
+          ) AS role
+          FROM users
+          LEFT JOIN roles ON users.role::text = roles.id::text
+          WHERE users.email = '${body.email}'
+        `)
+      );
 
-    const passwordsMatch = await compare(password, result[0].password!);
-    const usersData = {
-      usersId: result[0].id,
-    };
-    if (passwordsMatch) {
-      // Generate access token using the refresh token
-      const access_token = await tokenService.createJWT(usersData, "access");
+      if (rows.length === 0) {
+        return NextResponse.json(
+          { message: "User not found" },
+          { status: 404 }
+        );
+      }
+
+      // Access the first row
+      const user = rows[0] as any;
+      const passwordsMatch = await compare(body.password, user.password!);
+      if (!passwordsMatch) {
+        return NextResponse.json(
+          { message: "Invalid Credentials" },
+          { status: 401 }
+        );
+      }
+
+      const usersData = {
+        usersId: user.id,
+      };
+      const usersInfo = {
+        usersId: user.id,
+        ...user,
+      };
+
+      // Generate access and refresh tokens
+      const access_token = await tokenService.createJWT(usersInfo, "access");
       const refresh_token = await tokenService.createJWT(usersData, "refresh");
 
       // Return users data along with tokens
@@ -28,36 +67,23 @@ async function authenticateUser(email: string, password: string) {
         access_token,
         refresh_token,
       };
-      return authenticatedUser;
-    } else {
-      throw new Error("Authentication Failed");
-    }
-  } catch (error) {
-    console.log(error);
 
-    throw new Error("Error on Authentication");
-  }
-}
+      const session = {
+        token: authenticatedUser,
+        user: usersInfo,
+        account: usersInfo,
+      };
+      console.log(usersInfo);
 
-// Export handlers
-export const { POST } = {
-  POST: async function (request: NextRequest, ctx: ApiRequestContext) {
-    const body = (await useRequestData(request, ctx)).body as any;
-    try {
-      const auth = await authenticateUser(body.email, body.password);
-      const res = NextResponse.json(auth);
-      res.cookies.set("access_token", auth.access_token, {
-        path: "/",
-      });
-      res.cookies.set("refresh_token", auth.refresh_token, {
-        path: "/",
-      });
+      await setCookieSession(session);
+
+      const res = NextResponse.json(session);
       return res;
     } catch (error) {
-      console.log(error);
+      console.error("Authentication error:", error);
       return NextResponse.json(
         { message: "Authentication Failed" },
-        { status: 401 }
+        { status: 500 }
       );
     }
   },

@@ -10,7 +10,7 @@ const EntityLayout: React.FC = () => {
         isCreate: true,
         isList: true,
         isUpdate: true,
-        isView: true,
+        isView: false,
         isDelete: true,
       }}
       state={{
@@ -19,11 +19,11 @@ const EntityLayout: React.FC = () => {
       dataProviders={{
         list: {
           url: () => `/api/v1/${resource}`,
-          dataType: "un-paginated",
+          dataType: "paginated",
           method: "GET",
         },
         create: {
-          url: () => `/api/v1/${resource}`,
+          url: () => `/api/auth/register`,
           method: "POST",
           massage: {
             success: "Data Created Successfully",
@@ -84,7 +84,7 @@ const EntityLayout: React.FC = () => {
             condition: ["required"],
           },
           {
-            name: "roleId",
+            name: "role",
             label: "Role",
             type: "select",
             condition: ["required"],

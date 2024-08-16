@@ -19,6 +19,7 @@ import { fleetRequest } from "@db/schema";
 import { useSetState } from "@mantine/hooks";
 import { MapAutocompleteInput } from "@components/google-map/components/autocomleteInput";
 import { departments } from "@/config/enum";
+import { DateTimePicker } from "@mantine/dates";
 type InsertModel = typeof fleetRequest.$inferInsert;
 const init = {
   driver: "",
@@ -32,6 +33,8 @@ const init = {
   distance: "",
   note: "",
   workGroup: "",
+  type: "",
+  departureDate: new Date().toDateString(),
 };
 const RequestForm = ({
   name,
@@ -110,11 +113,27 @@ const RequestForm = ({
             value={fields.workGroup}
             onChange={(value) => value && setFields({ workGroup: value })}
           />
+          <Select
+            className="form-field"
+            label={"Type"}
+            data={["Single-Trip", "Round-Trip"]}
+            value={fields.type}
+            onChange={(value) => value && setFields({ type: value })}
+          />
+          <DateTimePicker
+            className="form-field"
+            label="Departure Date Time"
+            value={new Date(fields.departureDate ?? "")}
+            onChange={(value) =>
+              value && setFields({ departureDate: value.toISOString() })
+            }
+          />
           <Textarea
             className="form-field"
             label="Note"
             onChange={(e) => setFields({ note: e.target.value })}
           />
+
           <Flex className=" items-center justify-end w-full">
             <Button
               onClick={() =>

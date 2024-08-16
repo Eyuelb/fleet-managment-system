@@ -26,6 +26,7 @@ import { MapAutocompleteInput } from "@components/google-map/components/autocoml
 import SelectFromDataSource from "@components/data-source-select";
 import { departments } from "@/config/enum";
 import StatusBadge from "@lib/data-table/components/status-badge";
+import { DateTimePicker } from "@mantine/dates";
 type InsertModel = typeof fleetRequest.$inferInsert;
 
 const RequestHandleForm = ({
@@ -45,7 +46,7 @@ const RequestHandleForm = ({
     onChange: (value: InsertModel[typeof name]) => setFields({ [name]: value }),
   });
   const { mutate, isPending } = useMutationRequest<any, any>({
-    ...getDataSourceMutation("fleetRequest", "PUT",initValue.id),
+    ...getDataSourceMutation("fleetRequest", "PUT", initValue.id),
     massage: {
       success: `Request handled successfully`,
     },
@@ -123,6 +124,27 @@ const RequestHandleForm = ({
             {...register("workGroup")}
             disabled
           />
+          <Select
+            className="form-field"
+            label={"Type"}
+            data={["Single-Trip", "Round-Trip"]}
+            {...register("type")}
+            disabled
+          />
+          {fields.departureDate && (
+            <DateTimePicker
+              className="form-field"
+              label="Departure Date Time"
+              value={
+                new Date(fields.departureDate ?? new Date().toDateString())
+              }
+              onChange={(value) =>
+                value && setFields({ departureDate: value.toISOString() })
+              }
+              disabled
+            />
+          )}
+
           <Textarea
             className="form-field"
             label="Note"

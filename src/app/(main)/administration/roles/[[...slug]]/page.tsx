@@ -20,7 +20,7 @@ const EntityLayout: React.FC = () => {
       dataProviders={{
         list: {
           url: () => `/api/v1/${resource}`,
-          dataType: "un-paginated",
+          dataType: "paginated",
           method: "GET",
         },
         create: {

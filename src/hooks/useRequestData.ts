@@ -4,7 +4,7 @@ import { resourcesConfig } from "../config/resources";
 import { NextRequest, NextResponse } from "next/server";
 import { parseUrlParams } from "@utils/helper";
 import { QueryParams } from "@db/model";
-import { Session } from "@supabase/supabase-js";
+import { Session } from "@lib/auth/auth.model";
 
 type RequestData<TBody> = {
   resource: ApiResources;
@@ -24,8 +24,8 @@ export const useRequestData = async <TBody>(
 ): Promise<RequestData<TBody>> => {
   try {
     if (ctx.params.slug && ctx.params.slug.length > 0) {
-      const resource = (ctx.params.slug[0] as ApiResources) ?? undefined;
-      const id = ctx.params.slug[1] ?? undefined;
+      const resource = (ctx.params?.slug[0] as ApiResources) ?? undefined;
+      const id = ctx.params?.slug[1] ?? undefined;
       const method = request.method as MethodType;
       const operation = ctx.params.slug[2] ?? undefined;
       const session = ctx.session;
@@ -49,8 +49,8 @@ export const useRequestData = async <TBody>(
         query,
         session
       };
-    } else if (ctx.params.slug) {
-      // console.log(ctx.params.slug);
+    } else if (ctx?.params?.slug) {
+       console.log(ctx.params?.slug);
     }
     throw Error("Invalid request!");
   } catch (error: any) {

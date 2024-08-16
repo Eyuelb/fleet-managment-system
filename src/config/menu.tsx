@@ -1,19 +1,20 @@
-import { SidebarItem } from "@components/common/layouts/common";
+import { SidebarLinks } from "@components/common/layouts/common";
 import { iconDefaultProps } from "./icon";
 import {
+  IconDashboard,
   IconFolderOpen,
   IconFolderPlus,
-  IconFolderQuestion,
   IconFolderStar,
-  IconHome,
   IconMapPinSearch,
-  IconSettings,
   IconSettingsBolt,
-  IconUser,
-  IconUsers,
 } from "@tabler/icons-react";
 
-export const sidebarItems: SidebarItem[] = [
+export const sidebarItems: SidebarLinks[] = [
+  {
+    label: "Dashboard",
+    icon: <IconDashboard {...iconDefaultProps} />,
+    link: "/",
+  },
   {
     label: "My Requests",
     icon: <IconFolderStar {...iconDefaultProps} />,
@@ -47,16 +48,8 @@ export const sidebarItems: SidebarItem[] = [
         link: "/administration/roles/list",
       },
       {
-        label: "Groups",
-        link: "/administration/groups/list",
-      },
-      {
         label: "Vehicles",
         link: "/administration/vehicles/list",
-      },
-      {
-        label: "Routes",
-        link: "/administration/routes/list",
       },
     ],
   },
@@ -65,7 +58,7 @@ interface Resource {
   value: string;
   label: string;
 }
-const extractResources = (items: SidebarItem[]): Resource[] => {
+const extractResources = (items: SidebarLinks[]): Resource[] => {
   const resources: Resource[] = [];
 
   items.forEach((item) => {

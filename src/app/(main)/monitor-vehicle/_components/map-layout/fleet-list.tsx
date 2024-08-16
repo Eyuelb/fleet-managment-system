@@ -33,7 +33,7 @@ type Props = {
 const FleetList = (props: Props) => {
   const { data, onSelect, selected, isLoading } = props;
   const selectedCol = selected
-    ? data?.find((d) => d.id === selected.id ?? "")
+    ? data?.find((d) => d.id === selected.id)
     : null;
   return (
     <Box>
