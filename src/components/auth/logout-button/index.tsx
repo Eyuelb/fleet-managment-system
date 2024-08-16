@@ -6,8 +6,10 @@ import {
   IconChevronDown,
   IconLogin,
   IconLogout,
+  IconUser,
   IconUserCircle,
 } from "@tabler/icons-react";
+import Link from "next/link";
 export default function LogoutButton() {
   const { session } = useAuth();
 
@@ -38,6 +40,13 @@ export default function LogoutButton() {
         </Menu.Target>
 
         <Menu.Dropdown>
+        <Menu.Item
+            component={Link}
+            href="/profile"
+            leftSection={<IconUser size="0.9rem" stroke={1.5} />}
+          >
+            Profile
+          </Menu.Item>
           <Menu.Item
             leftSection={authStatus.icon}
             onClick={async () => {

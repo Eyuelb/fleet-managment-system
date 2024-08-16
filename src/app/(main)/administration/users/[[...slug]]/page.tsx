@@ -1,9 +1,21 @@
 "use client";
+import { ColumnsType } from "@db/model";
+import useQueryRequest from "@hooks/useQueryRequest";
 import { EntityProvider } from "@lib/entity/provider";
-import React from "react";
+import { getDataSourceQuery } from "@utils/helper";
+import React, { useCallback } from "react";
 
 const resource = "users";
 const EntityLayout: React.FC = () => {
+  const { data } = useQueryRequest<ColumnsType<"roles">[]>({
+    ...getDataSourceQuery("roles", ["all-list"]),
+    dataType: "un-paginated",
+    placeholder: [],
+  });
+  const getRoleNameById = useCallback(
+    (id: string) => data?.find((r) => r.id === id)?.name,
+    [data]
+  );
   return (
     <EntityProvider
       actions={{
@@ -65,6 +77,9 @@ const EntityLayout: React.FC = () => {
           {
             accessorKey: "role",
             header: "Role",
+            Cell: ({ cell }) => (
+              <div>{getRoleNameById(cell.getValue() as string)}</div>
+            ),
           },
         ],
       }}
